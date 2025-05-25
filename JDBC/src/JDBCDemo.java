@@ -12,11 +12,12 @@ public class JDBCDemo {
         ResultSet rs = st.executeQuery(query);
 
         // initially rs will be pointing to headings of the columns
-        rs.next(); // move to the first record
-        System.out.println("Id is " + rs.getInt(1));
-        System.out.println("Name is " + rs.getString(2));
-        System.out.println("Salary is " + rs.getInt(3));
-
+//        rs.next(); // move to the first record
+        while(rs.next()) {
+            System.out.println("Id is " + rs.getInt(1));
+            System.out.println("Name is " + rs.getString(2));
+            System.out.println("Salary is " + rs.getInt(3));
+        }
         con.close();
     }
 }
