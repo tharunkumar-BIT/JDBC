@@ -4,6 +4,7 @@ public class JDBCDemo {
     public static void main(String[] args) throws Exception {
         readRecords();
 //        insertRecords();
+//        insertVars();
     }
 
     public static void readRecords() throws Exception {
@@ -33,6 +34,28 @@ public class JDBCDemo {
         String userName = "root";
         String password = "";
         String query = "insert into employee values (4, 'Priya', 250000)";
+
+        Connection con = DriverManager.getConnection(url, userName, password);
+        Statement st = con.createStatement();
+        int rows = st.executeUpdate(query); // use when updating a data
+        // returns number of rows affected.
+
+        System.out.println("Number of rows affected:" + rows);
+        con.close();
+    }
+
+    // insert records using variables
+    public static void insertVars() throws Exception {
+        String url = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String userName = "root";
+        String password = "";
+
+        int id = 5;
+        String name = "Varun";
+        int salary = 300000;
+
+//        "insert into employee values (5, 'Varun', 300000)"
+        String query = "insert into employee values (" + id + ", '" + name + "', " + salary + ")";
 
         Connection con = DriverManager.getConnection(url, userName, password);
         Statement st = con.createStatement();
