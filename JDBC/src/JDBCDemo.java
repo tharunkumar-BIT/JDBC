@@ -2,9 +2,10 @@ import java.sql.*;
 
 public class JDBCDemo {
     public static void main(String[] args) throws Exception {
-        readRecords();
+//        readRecords();
 //        insertRecords();
 //        insertVars();
+        insertUsingPst();
     }
 
     public static void readRecords() throws Exception {
@@ -54,8 +55,9 @@ public class JDBCDemo {
         String name = "Varun";
         int salary = 300000;
 
-//        "insert into employee values (5, 'Varun', 300000)"
+        // "insert into employee values (5, 'Varun', 300000)"
         String query = "insert into employee values (" + id + ", '" + name + "', " + salary + ")";
+        // difficult to write this line
 
         Connection con = DriverManager.getConnection(url, userName, password);
         Statement st = con.createStatement();
@@ -63,6 +65,32 @@ public class JDBCDemo {
         // returns number of rows affected.
 
         System.out.println("Number of rows affected:" + rows);
+        con.close();
+    }
+
+    // insert records with prepared statement
+    public static void insertUsingPst() throws Exception {
+        String url = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String userName = "root";
+        String password = "";
+
+        int id = 6;
+        String name = "Karthi";
+        int salary = 350000;
+
+        // "insert into employee values (5, 'Varun', 300000)"
+        String query = "insert into employee values (?,?,?);";
+
+        Connection con = DriverManager.getConnection(url, userName, password);
+
+        PreparedStatement pst = con.prepareStatement(query);
+        // nth index, variable
+        pst.setInt(1, id);
+        pst.setString(2, name);
+        pst.setInt(3, salary);
+
+        int rows = pst.executeUpdate();
+        System.out.println("Number of Rows affected in pst: " + rows);
         con.close();
     }
 }
