@@ -5,7 +5,8 @@ public class JDBCDemo {
 //        readRecords();
 //        insertRecords();
 //        insertVars();
-        insertUsingPst();
+//        insertUsingPst();
+        delete();
     }
 
     public static void readRecords() throws Exception {
@@ -91,6 +92,25 @@ public class JDBCDemo {
 
         int rows = pst.executeUpdate();
         System.out.println("Number of Rows affected in pst: " + rows);
+        con.close();
+    }
+
+    // delete record
+    public static void delete() throws Exception {
+        String url = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String userName = "root";
+        String password = "";
+
+        int id = 5;
+
+        String query = "delete from employee where emp_id = " + id;
+
+        Connection con = DriverManager.getConnection(url, userName, password);
+        Statement st = con.createStatement();
+        int rows = st.executeUpdate(query); // we can use it also for deleting record
+        // returns number of rows affected.
+
+        System.out.println("Number of rows affected in delete:" + rows);
         con.close();
     }
 }
