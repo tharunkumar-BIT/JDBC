@@ -9,7 +9,8 @@ public class JDBCDemo {
 //        delete();
 //        update();
 //        updatePst();
-        sp();
+//        sp();
+        sp2();
     }
 
     public static void readRecords() throws Exception {
@@ -170,6 +171,28 @@ public class JDBCDemo {
 
         CallableStatement cst = con.prepareCall("{call GetEmp()}");
 
+        ResultSet rs = cst.executeQuery(); // in GetEmp() function it is only reading the data. So we use executeQuery()
+
+        while(rs.next()) {
+            System.out.println("Id is " + rs.getInt(1));
+            System.out.println("Name is " + rs.getString(2));
+            System.out.println("Salary is " + rs.getInt(3));
+        }
+        con.close();
+    }
+
+    // calling simple stored procedure with input parameters
+    public static void sp2() throws Exception{
+        String url = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String userName = "root";
+        String password = "";
+
+        int id = 3;
+
+        Connection con = DriverManager.getConnection(url, userName, password);
+
+        CallableStatement cst = con.prepareCall("{call GetEmpById(?)}");
+        cst.setInt(1, id);
         ResultSet rs = cst.executeQuery(); // in GetEmp() function it is only reading the data. So we use executeQuery()
 
         while(rs.next()) {
