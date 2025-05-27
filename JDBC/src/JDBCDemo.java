@@ -10,7 +10,8 @@ public class JDBCDemo {
 //        update();
 //        updatePst();
 //        sp();
-        sp2();
+//        sp2();
+        sp3();
     }
 
     public static void readRecords() throws Exception {
@@ -200,6 +201,25 @@ public class JDBCDemo {
             System.out.println("Name is " + rs.getString(2));
             System.out.println("Salary is " + rs.getInt(3));
         }
+        con.close();
+    }
+
+    // calling simple stored procedure with input and output parameters
+    public static void sp3() throws Exception{
+        String url = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String userName = "root";
+        String password = "";
+
+        int id = 3;
+
+        Connection con = DriverManager.getConnection(url, userName, password);
+
+        CallableStatement cst = con.prepareCall("{call GetEmpNameById(?,?)}");
+        cst.setInt(1, id);
+        cst.registerOutParameter(2, Types.VARCHAR); // store the result
+        cst.executeUpdate(); // it is not only reading but also updating the variable do use executeUpdate()
+
+        System.out.println(cst.getString(2)); // get the result
         con.close();
     }
 }
