@@ -12,7 +12,8 @@ public class JDBCDemo {
 //        sp();
 //        sp2();
 //        sp3();
-        commitDemo();
+//        commitDemo();
+        batchDemo();
     }
 
     public static void readRecords() throws Exception {
@@ -253,5 +254,34 @@ public class JDBCDemo {
         }
 
         con.close();
+    }
+
+    // batch processing
+    public static void batchDemo() throws Exception{
+        String url = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String userName = "root";
+        String password = "";
+
+        String query1 = "update employee set salary = 400000 where emp_id = 1";
+        String query2 = "update employee set salary = 400000 where emp_id = 2";
+        String query3 = "update employee set salary = 400000 where emp_id = 3";
+        String query4 = "update employee set salary = 400000 where emp_id = 4";
+
+        Connection con = DriverManager.getConnection(url, userName, password);
+        Statement st = con.createStatement();
+        // add multiple queries as a batch and execute them at once.
+        st.addBatch(query1);
+        st.addBatch(query2);
+        st.addBatch(query3);
+        st.addBatch(query4);
+
+        int[] res = st.executeBatch();
+
+        for(int i : res){
+            System.out.println("Rows affected: " + i);
+        }
+
+        con.close();
+
     }
 }
