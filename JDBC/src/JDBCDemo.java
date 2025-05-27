@@ -11,7 +11,8 @@ public class JDBCDemo {
 //        updatePst();
 //        sp();
 //        sp2();
-        sp3();
+//        sp3();
+        commitDemo();
     }
 
     public static void readRecords() throws Exception {
@@ -220,6 +221,37 @@ public class JDBCDemo {
         cst.executeUpdate(); // it is not only reading but also updating the variable do use executeUpdate()
 
         System.out.println(cst.getString(2)); // get the result
+        con.close();
+    }
+
+    // commit vs autocommit
+    public static void commitDemo() throws Exception{
+        String url = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String userName = "root";
+        String password = "";
+
+        // correct query which will be executed successfully
+        String query1 = "update employee set salary = 550000 where emp_id = 1";
+        // incorrect query which will give error.
+        String query2 = "updat employee set salary = 550000 where emp_id = 2";
+
+        // to provide atomicity if we are doing a change in DB we need to do it completely, or never do it at all.
+        // if autocommit is ON we won't be able to rollback to previous commit
+        Connection con = DriverManager.getConnection(url, userName, password);
+        // turn off autocommit
+        con.setAutoCommit(false); // by default it is true.
+        Statement st = con.createStatement();
+        int rows1 = st.executeUpdate(query1);
+        System.out.println("Rows Affected: " + rows1);
+        int rows2 = st.executeUpdate(query2);
+        System.out.println("Rows Affected: " + rows2);
+
+        if(rows1 > 0 && rows2 > 0){
+            con.commit();
+            // if both statements are true it will commit the changes
+            // even if one of the statements is wrong, it will not be commited and hence DB won't be changed.
+        }
+
         con.close();
     }
 }
