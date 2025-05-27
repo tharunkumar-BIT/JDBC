@@ -8,7 +8,8 @@ public class JDBCDemo {
 //        insertUsingPst();
 //        delete();
 //        update();
-        updatePst();
+//        updatePst();
+        sp();
     }
 
     public static void readRecords() throws Exception {
@@ -151,6 +152,31 @@ public class JDBCDemo {
         // returns number of rows affected.
 
         System.out.println("Number of rows affected in delete:" + rows);
+        con.close();
+    }
+
+    // 3 Types of Statements
+    // normal statements
+    // prepared statements
+    // callable statements , for calling procedures which is created in mysql
+
+    // calling simple stored procedure
+    public static void sp() throws Exception{
+        String url = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String userName = "root";
+        String password = "";
+
+        Connection con = DriverManager.getConnection(url, userName, password);
+
+        CallableStatement cst = con.prepareCall("{call GetEmp()}");
+
+        ResultSet rs = cst.executeQuery(); // in GetEmp() function it is only reading the data. So we use executeQuery()
+
+        while(rs.next()) {
+            System.out.println("Id is " + rs.getInt(1));
+            System.out.println("Name is " + rs.getString(2));
+            System.out.println("Salary is " + rs.getInt(3));
+        }
         con.close();
     }
 }
