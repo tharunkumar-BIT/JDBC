@@ -262,12 +262,16 @@ public class JDBCDemo {
         String userName = "root";
         String password = "";
 
-        String query1 = "update employee set salary = 400000 where emp_id = 1";
-        String query2 = "update employee set salary = 400000 where emp_id = 2";
-        String query3 = "update employee set salary = 400000 where emp_id = 3";
-        String query4 = "update employee set salary = 400000 where emp_id = 4";
+        String query1 = "update employee set salary = 200000 where emp_id = 1";
+        String query2 = "update employee set salary = 200000 where emp_id = 2";
+        String query3 = "update employee set salary = 200000 where emp_id = 3";
+        // we need to implement commit in batching also.
+        // introduce a error here. because of this error above three queries should not be executed.
+        String query4 = "updat employee set salary = 200000 where emp_id = 4";
 
         Connection con = DriverManager.getConnection(url, userName, password);
+        // turn off autocommit
+        con.setAutoCommit(false);
         Statement st = con.createStatement();
         // add multiple queries as a batch and execute them at once.
         st.addBatch(query1);
@@ -278,9 +282,10 @@ public class JDBCDemo {
         int[] res = st.executeBatch();
 
         for(int i : res){
-            System.out.println("Rows affected: " + i);
+            if(i > 0) continue;
+            else con.rollback(); // rollback to previous commit if one of the query is wrong.
         }
-
+        con.commit(); // commit the changes.
         con.close();
 
     }
