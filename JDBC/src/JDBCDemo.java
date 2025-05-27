@@ -7,7 +7,8 @@ public class JDBCDemo {
 //        insertVars();
 //        insertUsingPst();
 //        delete();
-        update();
+//        update();
+        updatePst();
     }
 
     public static void readRecords() throws Exception {
@@ -126,6 +127,27 @@ public class JDBCDemo {
         Connection con = DriverManager.getConnection(url, userName, password);
         Statement st = con.createStatement();
         int rows = st.executeUpdate(query); // we can use it also for updating record
+        // returns number of rows affected.
+
+        System.out.println("Number of rows affected in delete:" + rows);
+        con.close();
+    }
+
+    // update record by prepared statement
+    public static void updatePst() throws Exception {
+        String url = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String userName = "root";
+        String password = "";
+
+        String query = "update employee set salary = ? where emp_id = ?";
+
+        Connection con = DriverManager.getConnection(url, userName, password);
+
+        PreparedStatement pst = con.prepareStatement(query);
+        pst.setInt(1, 250000);
+        pst.setInt(2, 1);
+
+        int rows = pst.executeUpdate(); // we can use it also for updating record
         // returns number of rows affected.
 
         System.out.println("Number of rows affected in delete:" + rows);
