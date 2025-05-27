@@ -6,7 +6,8 @@ public class JDBCDemo {
 //        insertRecords();
 //        insertVars();
 //        insertUsingPst();
-        delete();
+//        delete();
+        update();
     }
 
     public static void readRecords() throws Exception {
@@ -108,6 +109,23 @@ public class JDBCDemo {
         Connection con = DriverManager.getConnection(url, userName, password);
         Statement st = con.createStatement();
         int rows = st.executeUpdate(query); // we can use it also for deleting record
+        // returns number of rows affected.
+
+        System.out.println("Number of rows affected in delete:" + rows);
+        con.close();
+    }
+
+    // update record by hardcoding
+    public static void update() throws Exception {
+        String url = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String userName = "root";
+        String password = "";
+
+        String query = "update employee set salary = 150000 where emp_id = 1";
+
+        Connection con = DriverManager.getConnection(url, userName, password);
+        Statement st = con.createStatement();
+        int rows = st.executeUpdate(query); // we can use it also for updating record
         // returns number of rows affected.
 
         System.out.println("Number of rows affected in delete:" + rows);
