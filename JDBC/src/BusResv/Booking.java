@@ -1,4 +1,5 @@
 package BusResv;
+import java.sql.SQLException;
 import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,23 +26,14 @@ public class Booking {
 		}
 	}
 	
-	public boolean isAvailable(ArrayList<Booking> bookings, ArrayList<Bus> buses) {
-		// only read the data, don't change anything on the list because reference will be received as parameter in this function
-		// if we change, it would lead to data lost or miss match
-		int capacity = 0;
-		for(Bus bus : buses) {
-			if(bus.getBusNo() == busNo) {
-				capacity = bus.getCapacity();
-			}
-		}
-		
-		int booked = 0;
-		for(Booking b : bookings) {
-			if(b.busNo == busNo && b.date.equals(date)) {
-				booked++;
-			}
-		}
-		
-		return booked < capacity ? true : false;
+	public boolean isAvailable() throws SQLException {
+
+		BusDAO busdao = new BusDAO();
+		int capacity = busdao.getCapacity(busNo);
+
+		BookingDAO bookingdao = new BookingDAO();
+		int booked = bookingdao.getBookedCount(busNo, date);
+
+		return booked < capacity;
 	}
 }
