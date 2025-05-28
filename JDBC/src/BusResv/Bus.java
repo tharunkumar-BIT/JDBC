@@ -35,7 +35,4 @@ public class Bus {
 		capacity = cap;
 	}
 	
-	public void displayBusInfo() {
-		System.out.println("Bus No:" + busNo + " AC:" + ac + " Total Capacity:" + capacity );
-	}
 }
